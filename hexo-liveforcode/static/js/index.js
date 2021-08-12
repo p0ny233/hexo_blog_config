@@ -266,7 +266,7 @@
         });
     });
     
-    // 按 esc键 ，取消搜索框
+// 按 esc键 ，取消搜索框
 $(document).keydown(function (event) {
         if (event.keyCode == 27) {
             setTimeout(function(){
@@ -274,8 +274,27 @@ $(document).keydown(function (event) {
                 $('.search-cover').remove();
                 $('.search-window')[0].style.display= "none";
                 document.getElementsByTagName("body")[0].style.overflow = "auto";
-			},300)
+		        scroll = new IScroll(".search-scroll", {
+					scrollbars: true,
+					mouseWheel: true,
+					fadeScrollbars: true,
+					resizePolling: 60
+                    });
+
+				$('.search-window').hide();
+				$('.search-cover').remove();
+				// 移除移动端防止滚动监听-输出框获取焦点时
+				document.body.removeEventListener('touchmove', handler, { passive: false });
+				$('body').css('overflow', 'auto');
+				// 关闭搜索窗口时, 搜索内容清空
+				$('#search-input').find('input').val('');
+				$('#search-stats').empty();
+				$('#search-hits').empty();
+				$('#search-pagination').empty();
+				// 销毁滚动条
+				scroll.destroy();
+				scroll = null;
+				},300)
         }
     });
-
 }
